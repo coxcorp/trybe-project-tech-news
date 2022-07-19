@@ -1,5 +1,6 @@
 import requests
 import time
+import parsel
 
 
 # Requisito 1
@@ -12,13 +13,14 @@ def fetch(url):
         time.sleep(1)
     except (requests.HTTPError, requests.ReadTimeout):
         return None
-    else:
-        return response.text
+    return response.text
 
 
 # Requisito 2
 def scrape_novidades(html_content):
-    """Seu código deve vir aqui"""
+    selector = parsel.Selector(html_content)
+    urls = selector.css(".entry-title a::attr(href)").getall()
+    return urls
 
 
 # Requisito 3
