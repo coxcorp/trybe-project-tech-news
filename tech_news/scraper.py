@@ -36,13 +36,17 @@ def scrape_noticia(html_content):
     selector = parsel.Selector(html_content)
     return {
         "url": selector.css('link[rel="canonical"]::attr(href)').get(),
-        "title": selector.css("h1.entry-title::text").get(),
+        "title": selector.css("h1.entry-title::text").get().strip(),
         "timestamp": selector.css("li.meta-date::text").get(),
         "writer": selector.css("span.author > a::text").get(),
         "comments_count": len(selector.css("ol.comment-list li").getall()),
         "summary": "".join(
-            selector.css("div.entry-content p:nth-child(2) *::text").getall()
-        ),
+            (
+                selector.css(
+                    ".entry-content > p:nth-of-type(1) *::text"
+                ).getall()
+            )
+        ).strip(),
         "tags": selector.css('a[rel="tag"]::text').getall(),
         "category": selector.css("a > span.label::text").get(),
     }
