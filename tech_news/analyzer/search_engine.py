@@ -20,7 +20,6 @@ def search_by_date(date):
         for news in search_news({"timestamp": date.strftime("%d/%m/%Y")}):
             news_list.append((news["title"], news["url"]))
         return news_list
-
     except ValueError:
         raise ValueError("Data inválida")
 
